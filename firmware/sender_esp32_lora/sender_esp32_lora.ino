@@ -23,6 +23,11 @@ static constexpr int LORA_DIO0 = 26;
 
 static constexpr int VEDIRECT_RX = 34; // ESP32 RX <- VE.Direct TX (input-only pin)
 static constexpr int VEDIRECT_TX = -1; // RX-only setup: BMV TX -> ESP32 RX
+static constexpr int LORA_RST = 14;
+static constexpr int LORA_DIO0 = 26;
+
+static constexpr int VEDIRECT_RX = 16; // ESP32 RX <- VE.Direct TX
+static constexpr int VEDIRECT_TX = 17; // not used by BMV-700, keep for UART init
 
 // ---------------------------
 // LoRa radio config
@@ -39,12 +44,19 @@ static constexpr long LORA_FREQ_HZ = 433E6;
 #else
 static constexpr long LORA_FREQ_HZ = 868E6; // default for NL/EU
 #endif
+static constexpr long LORA_FREQ_HZ = 433E6; // SX1278 typically 433 MHz
 static constexpr int LORA_TX_POWER_DBM = 17;
 static constexpr long LORA_BW_HZ = 125E3;
 static constexpr int LORA_SPREADING_FACTOR = 10;
 static constexpr int LORA_CODING_RATE = 7; // 4/7 (more robust)
 static constexpr uint8_t LORA_SYNC_WORD = 0x12;
 static constexpr int LORA_PREAMBLE_LEN = 12;
+static constexpr long LORA_FREQ_HZ = 433E6; // SX1278 typically 433 MHz
+static constexpr int LORA_TX_POWER_DBM = 14;
+static constexpr long LORA_BW_HZ = 125E3;
+static constexpr int LORA_SPREADING_FACTOR = 9;
+static constexpr int LORA_CODING_RATE = 5; // 4/5
+static constexpr uint8_t LORA_SYNC_WORD = 0x12;
 
 // ---------------------------
 // Timing / safety
