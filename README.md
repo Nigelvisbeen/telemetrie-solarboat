@@ -56,7 +56,8 @@ Belangrijk:
 | TX (data uit BMV) | GPIO34 (RX, input-only) |
 | GND | GND |
 
-<img width="1652" height="1668" alt="image" src="https://github.com/user-attachments/assets/00572766-f8c5-4e73-9bda-bdc032867d40" />
+<img width="1920" height="1080" alt="aansluiten lora transmitter" src="https://github.com/user-attachments/assets/01414516-20f4-48e5-a9bd-13734b91a84b" />
+
 
 
 ## 4.2 Ontvanger (LILYGO T3 #2 aan wal)
