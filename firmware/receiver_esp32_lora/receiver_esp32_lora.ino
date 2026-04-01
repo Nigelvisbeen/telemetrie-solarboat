@@ -18,7 +18,7 @@ static constexpr int LORA_SCK = 5;
 static constexpr int LORA_MISO = 19;
 static constexpr int LORA_MOSI = 27;
 static constexpr int LORA_CS = 18;
-static constexpr int LORA_RST = 14;
+static constexpr int LORA_RST = 23; // LILYGO T3 v1.6.1
 static constexpr int LORA_DIO0 = 26;
 
 // ---------------------------
@@ -36,7 +36,6 @@ static constexpr long LORA_FREQ_HZ = 433E6;
 #else
 static constexpr long LORA_FREQ_HZ = 868E6; // default for NL/EU
 #endif
-static constexpr long LORA_FREQ_HZ = 433E6;
 static constexpr long LORA_BW_HZ = 125E3;
 static constexpr int LORA_SPREADING_FACTOR = 10;
 static constexpr int LORA_CODING_RATE = 7;
@@ -51,11 +50,6 @@ static constexpr int OLED_SDA = 21;
 static constexpr int OLED_SCL = 22;
 static Adafruit_SSD1306 g_display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
 #endif
-static constexpr long LORA_FREQ_HZ = 433E6;
-static constexpr long LORA_BW_HZ = 125E3;
-static constexpr int LORA_SPREADING_FACTOR = 9;
-static constexpr int LORA_CODING_RATE = 5;
-static constexpr uint8_t LORA_SYNC_WORD = 0x12;
 
 #pragma pack(push, 1)
 struct TelemetryPacket {
