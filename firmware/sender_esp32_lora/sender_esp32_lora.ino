@@ -1,15 +1,6 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <LoRa.h>
-#include <Wire.h>
-
-#if __has_include(<Adafruit_GFX.h>) && __has_include(<Adafruit_SSD1306.h>)
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#define HAS_OLED 1
-#else
-#define HAS_OLED 0
-#endif
 
 // ---------------------------
 // Hardware config (adjust to your board)
@@ -18,33 +9,29 @@ static constexpr int LORA_SCK = 5;
 static constexpr int LORA_MISO = 19;
 static constexpr int LORA_MOSI = 27;
 static constexpr int LORA_CS = 18;
-static constexpr int LORA_RST = 23; // LILYGO T3 v1.6.1
+static constexpr int LORA_RST = 14;
 static constexpr int LORA_DIO0 = 26;
 
-static constexpr int VEDIRECT_RX = 34; // ESP32 RX <- VE.Direct TX (input-only pin)
-static constexpr int VEDIRECT_TX = -1; // RX-only setup: BMV TX -> ESP32 RX
+static constexpr int VEDIRECT_RX = 16; // ESP32 RX <- VE.Direct TX
+static constexpr int VEDIRECT_TX = 17; // not used by BMV-700, keep for UART init
 
 // ---------------------------
 // LoRa radio config
 // ---------------------------
 // Tuned for longer range (~1km+ line-of-sight over water with decent antennas).
-#define LORA_REGION_EU868 1
-// #define LORA_REGION_US915 1
-// #define LORA_REGION_433 1
-
-#if defined(LORA_REGION_US915)
-static constexpr long LORA_FREQ_HZ = 915E6;
-#elif defined(LORA_REGION_433)
-static constexpr long LORA_FREQ_HZ = 433E6;
-#else
-static constexpr long LORA_FREQ_HZ = 868E6; // default for NL/EU
-#endif
+static constexpr long LORA_FREQ_HZ = 433E6; // SX1278 typically 433 MHz
 static constexpr int LORA_TX_POWER_DBM = 17;
 static constexpr long LORA_BW_HZ = 125E3;
 static constexpr int LORA_SPREADING_FACTOR = 10;
 static constexpr int LORA_CODING_RATE = 7; // 4/7 (more robust)
 static constexpr uint8_t LORA_SYNC_WORD = 0x12;
 static constexpr int LORA_PREAMBLE_LEN = 12;
+static constexpr long LORA_FREQ_HZ = 433E6; // SX1278 typically 433 MHz
+static constexpr int LORA_TX_POWER_DBM = 14;
+static constexpr long LORA_BW_HZ = 125E3;
+static constexpr int LORA_SPREADING_FACTOR = 9;
+static constexpr int LORA_CODING_RATE = 5; // 4/5
+static constexpr uint8_t LORA_SYNC_WORD = 0x12;
 
 // ---------------------------
 // Timing / safety
@@ -86,15 +73,6 @@ struct TelemetryPacket {
 #pragma pack(pop)
 
 static uint32_t g_sequence = 0;
-
-#if HAS_OLED
-static constexpr int OLED_WIDTH = 128;
-static constexpr int OLED_HEIGHT = 64;
-static constexpr int OLED_ADDR = 0x3C;
-static constexpr int OLED_SDA = 21;
-static constexpr int OLED_SCL = 22;
-static Adafruit_SSD1306 g_display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
-#endif
 
 static uint16_t crc16Ccitt(const uint8_t* data, size_t len) {
   uint16_t crc = 0xFFFF;
@@ -217,16 +195,6 @@ static void sendTelemetry() {
       packet.batteryMilliVolt / 1000.0,
       packet.batteryMilliAmp / 1000.0,
       packet.flags);
-
-#if HAS_OLED
-  g_display.clearDisplay();
-  g_display.setCursor(0, 0);
-  g_display.printf("SENDER seq:%lu\n", static_cast<unsigned long>(packet.sequence));
-  g_display.printf("V: %.2f V\n", packet.batteryMilliVolt / 1000.0);
-  g_display.printf("I: %.2f A\n", packet.batteryMilliAmp / 1000.0);
-  g_display.printf("flags: 0x%02X\n", packet.flags);
-  g_display.display();
-#endif
 }
 
 void setup() {
@@ -234,19 +202,6 @@ void setup() {
   delay(200);
   Serial.println("Solarboat sender booting...");
 
-#if HAS_OLED
-  Wire.begin(OLED_SDA, OLED_SCL);
-  if (g_display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
-    g_display.clearDisplay();
-    g_display.setTextSize(1);
-    g_display.setTextColor(SSD1306_WHITE);
-    g_display.setCursor(0, 0);
-    g_display.println("Solarboat sender");
-    g_display.display();
-  }
-#endif
-
-  // RX-only VE.Direct readout (no TX back to BMV required).
   Serial2.begin(19200, SERIAL_8N1, VEDIRECT_RX, VEDIRECT_TX);
 
   SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
