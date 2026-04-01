@@ -56,15 +56,18 @@ Belangrijk:
 | TX (data uit BMV) | GPIO34 (RX, input-only) |
 | GND | GND |
 
-<img width="976" height="549" alt="aansluiten lora transmitter" src="https://github.com/user-attachments/assets/01414516-20f4-48e5-a9bd-13734b91a84b" />
+<img width="1920  " height="1080" alt="aansluiten lora transmitter" src="https://github.com/user-attachments/assets/01414516-20f4-48e5-a9bd-13734b91a84b" />
 
 
 
 ## 4.2 Ontvanger (LILYGO T3 #2 aan wal)
 
-- Geen sensorbedrading nodig
+- Geen solderen nodig
 - Sluit de ontvanger met **micro-USB** aan op laptop
 - Via die micro-USB loopt voeding + serial data
+
+<img width="1920" height="1080" alt="aansluiten lora receiver" src="https://github.com/user-attachments/assets/f3762b20-8c8d-4e14-8532-bd4cd22b767f" />
+
 
 ---
 
