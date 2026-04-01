@@ -56,14 +56,8 @@ Belangrijk:
 | TX (data uit BMV) | GPIO34 (RX, input-only) |
 | GND | GND |
 
-**A/B/C kabelmapping (als jouw kabel zo gelabeld is):**
-- A = VE.Direct stekker naar BMV
-- B = GND -> ESP32 GND
-- C = TX -> ESP32 GPIO34
+<img width="1652" height="1668" alt="image" src="https://github.com/user-attachments/assets/00572766-f8c5-4e73-9bda-bdc032867d40" />
 
-### LoRa op LILYGO T3 (intern op board)
-Je hoeft hier niets te bedraden; dit zit intern:
-- MOSI=27, SCK=5, CS=18, DIO0=26, RST=23, MISO=19
 
 ## 4.2 Ontvanger (LILYGO T3 #2 aan wal)
 
