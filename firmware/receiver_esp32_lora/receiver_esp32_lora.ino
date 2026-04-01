@@ -1,6 +1,18 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <LoRa.h>
+<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
+#include <Wire.h>
+
+#if __has_include(<Adafruit_GFX.h>) && __has_include(<Adafruit_SSD1306.h>)
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#define HAS_OLED 1
+#else
+#define HAS_OLED 0
+#endif
+=======
+>>>>>>> main
 
 // ---------------------------
 // Hardware config (adjust to your board)
@@ -9,24 +21,54 @@ static constexpr int LORA_SCK = 5;
 static constexpr int LORA_MISO = 19;
 static constexpr int LORA_MOSI = 27;
 static constexpr int LORA_CS = 18;
+<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
+static constexpr int LORA_RST = 23; // LILYGO T3 v1.6.1
+=======
 static constexpr int LORA_RST = 14;
+>>>>>>> main
 static constexpr int LORA_DIO0 = 26;
 
 // ---------------------------
 // LoRa radio config
 // ---------------------------
 // Must exactly match sender settings.
+<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
+#define LORA_REGION_EU868 1
+// #define LORA_REGION_US915 1
+// #define LORA_REGION_433 1
+
+#if defined(LORA_REGION_US915)
+static constexpr long LORA_FREQ_HZ = 915E6;
+#elif defined(LORA_REGION_433)
 static constexpr long LORA_FREQ_HZ = 433E6;
+#else
+static constexpr long LORA_FREQ_HZ = 868E6; // default for NL/EU
+#endif
+=======
+static constexpr long LORA_FREQ_HZ = 433E6;
+>>>>>>> main
 static constexpr long LORA_BW_HZ = 125E3;
 static constexpr int LORA_SPREADING_FACTOR = 10;
 static constexpr int LORA_CODING_RATE = 7;
 static constexpr uint8_t LORA_SYNC_WORD = 0x12;
 static constexpr int LORA_PREAMBLE_LEN = 12;
+<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
+
+#if HAS_OLED
+static constexpr int OLED_WIDTH = 128;
+static constexpr int OLED_HEIGHT = 64;
+static constexpr int OLED_ADDR = 0x3C;
+static constexpr int OLED_SDA = 21;
+static constexpr int OLED_SCL = 22;
+static Adafruit_SSD1306 g_display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
+#endif
+=======
 static constexpr long LORA_FREQ_HZ = 433E6;
 static constexpr long LORA_BW_HZ = 125E3;
 static constexpr int LORA_SPREADING_FACTOR = 9;
 static constexpr int LORA_CODING_RATE = 5;
 static constexpr uint8_t LORA_SYNC_WORD = 0x12;
+>>>>>>> main
 
 #pragma pack(push, 1)
 struct TelemetryPacket {
@@ -62,6 +104,21 @@ void setup() {
   Serial.println("Solarboat receiver booting...");
   Serial.println("CSV header: pc_time_ms,seq,uptime_ms,battery_v,battery_i,flags,rssi,snr");
 
+<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
+#if HAS_OLED
+  Wire.begin(OLED_SDA, OLED_SCL);
+  if (g_display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
+    g_display.clearDisplay();
+    g_display.setTextSize(1);
+    g_display.setTextColor(SSD1306_WHITE);
+    g_display.setCursor(0, 0);
+    g_display.println("Solarboat receiver");
+    g_display.display();
+  }
+#endif
+
+=======
+>>>>>>> main
   SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
   LoRa.setPins(LORA_CS, LORA_RST, LORA_DIO0);
 
@@ -131,4 +188,17 @@ void loop() {
       static_cast<unsigned>(packet.flags),
       rssi,
       snr);
+<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
+
+#if HAS_OLED
+  g_display.clearDisplay();
+  g_display.setCursor(0, 0);
+  g_display.printf("RECV seq:%lu\n", static_cast<unsigned long>(packet.sequence));
+  g_display.printf("V: %.2f V\n", batteryV);
+  g_display.printf("I: %.2f A\n", batteryI);
+  g_display.printf("RSSI:%d SNR:%.1f\n", rssi, snr);
+  g_display.display();
+#endif
+=======
+>>>>>>> main
 }
