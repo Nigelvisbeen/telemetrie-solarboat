@@ -18,6 +18,14 @@ static constexpr int VEDIRECT_TX = 17; // not used by BMV-700, keep for UART ini
 // ---------------------------
 // LoRa radio config
 // ---------------------------
+// Tuned for longer range (~1km+ line-of-sight over water with decent antennas).
+static constexpr long LORA_FREQ_HZ = 433E6; // SX1278 typically 433 MHz
+static constexpr int LORA_TX_POWER_DBM = 17;
+static constexpr long LORA_BW_HZ = 125E3;
+static constexpr int LORA_SPREADING_FACTOR = 10;
+static constexpr int LORA_CODING_RATE = 7; // 4/7 (more robust)
+static constexpr uint8_t LORA_SYNC_WORD = 0x12;
+static constexpr int LORA_PREAMBLE_LEN = 12;
 static constexpr long LORA_FREQ_HZ = 433E6; // SX1278 typically 433 MHz
 static constexpr int LORA_TX_POWER_DBM = 14;
 static constexpr long LORA_BW_HZ = 125E3;
@@ -212,6 +220,7 @@ void setup() {
   LoRa.setCodingRate4(LORA_CODING_RATE);
   LoRa.enableCrc();
   LoRa.setSyncWord(LORA_SYNC_WORD);
+  LoRa.setPreambleLength(LORA_PREAMBLE_LEN);
 
   Serial.println("Sender ready.");
 }

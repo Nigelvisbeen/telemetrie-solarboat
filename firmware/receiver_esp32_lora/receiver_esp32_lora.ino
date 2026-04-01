@@ -15,6 +15,13 @@ static constexpr int LORA_DIO0 = 26;
 // ---------------------------
 // LoRa radio config
 // ---------------------------
+// Must exactly match sender settings.
+static constexpr long LORA_FREQ_HZ = 433E6;
+static constexpr long LORA_BW_HZ = 125E3;
+static constexpr int LORA_SPREADING_FACTOR = 10;
+static constexpr int LORA_CODING_RATE = 7;
+static constexpr uint8_t LORA_SYNC_WORD = 0x12;
+static constexpr int LORA_PREAMBLE_LEN = 12;
 static constexpr long LORA_FREQ_HZ = 433E6;
 static constexpr long LORA_BW_HZ = 125E3;
 static constexpr int LORA_SPREADING_FACTOR = 9;
@@ -70,6 +77,7 @@ void setup() {
   LoRa.setCodingRate4(LORA_CODING_RATE);
   LoRa.enableCrc();
   LoRa.setSyncWord(LORA_SYNC_WORD);
+  LoRa.setPreambleLength(LORA_PREAMBLE_LEN);
 
   Serial.println("Receiver ready.");
 }

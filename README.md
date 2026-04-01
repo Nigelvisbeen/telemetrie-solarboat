@@ -53,6 +53,18 @@ Als je dat niet doet, flash je vaak per ongeluk de verkeerde firmware.
 
 > Belangrijk: TX van apparaat 1 gaat naar RX van apparaat 2.
 
+
+### VE.Direct zonder knippen (belangrijk)
+Je hoeft normaal **niks door te knippen** aan de BMV-700 unit zelf.
+
+- De BMV-700 heeft een **VE.Direct poort** (kleine 4-polige aansluiting), niet losse TX/GND schroefklemmen op de achterkant.
+- Gebruik daarom een **VE.Direct kabel** of een **VE.Direct -> UART breakout kabel/adapter**.
+- Vanaf die kabel/adapter pak je de signalen naar je ESP32:
+  - VE.Direct **TX** -> ESP32 **RX2 (GPIO16)**
+  - VE.Direct **GND** -> ESP32 **GND**
+
+Als je een kale kabel gebruikt waarbij aders niet gelabeld zijn: zoek eerst de pinout van precies dat kabeltype op en meet desnoods na met multimeter. Niet gokken.
+
 ### Stap 3: Ontvanger aansluiten (ESP32-B + LoRa + USB)
 Gebruik exact dezelfde LoRa pinmapping als hierboven op ESP32-B.
 Daarna ESP32-B met USB aan laptop koppelen.
@@ -145,9 +157,62 @@ In de `.ino` bestanden staan defaults:
 ### LoRa instellingen
 - Freq: `433E6`
 - Bandwidth: `125kHz`
-- SF: `9`
-- CR: `4/5`
+- SF: `10`
+- CR: `4/7`
 - Sync word: `0x12`
+- Preamble: `12`
+- TX power (sender): `17 dBm`
+
+
+
+## Exacte pins: BMV-700 VE.Direct naar ESP32/LoRa-board
+
+Belangrijk: je sluit de BMV-700 **niet** direct op de LoRa-radiochip aan.
+De VE.Direct data gaat naar de **ESP32 UART** op het board, en de ESP32 stuurt daarna via LoRa.
+
+### Aansluiting VE.Direct -> ESP32 (zender-board)
+Gebruik deze pins in de huidige firmware:
+- VE.Direct **TX** -> ESP32 **GPIO16** (RX2)
+- VE.Direct **GND** -> ESP32 **GND**
+
+Optioneel (meestal niet nodig voor alleen uitlezen):
+- ESP32 **GPIO17** (TX2) -> VE.Direct RX
+
+In code staat dit als:
+- `VEDIRECT_RX = 16`
+- `VEDIRECT_TX = 17`
+
+### Belangrijk voor de VE.Direct kabel
+- Gebruik een VE.Direct kabel of VE.Direct->UART breakout (niet knippen in de unit).
+- Aderkleuren kunnen per kabel verschillen; volg altijd de pinout van jouw specifieke kabel/adapter.
+- Meet bij twijfel eerst na met multimeter.
+
+### Als je een geïntegreerd ESP32+LoRa board koopt
+Dat is prima en vaak makkelijker. Dan blijft VE.Direct aansluiting **hetzelfde** (naar GPIO16/GND),
+maar de interne LoRa-SPI pins kunnen afwijken per boardtype.
+Pas in dat geval `LORA_SCK/MISO/MOSI/CS/RST/DIO0` in de firmware aan op de pinout van dat board.
+
+
+## Bereikdoel 1km+ zonder netwerk
+
+Ja, dat is precies deze opzet: **directe LoRa point-to-point** (geen LoRaWAN gateway nodig).
+
+Voor ~1km+ op water heb je vooral nodig:
+1. Goede antennes op beide kanten (zelfde band, netjes getuned).
+2. Antenne zo hoog mogelijk en vrij zichtlijn (LOS).
+3. Exact gelijke LoRa instellingen op zender en ontvanger.
+4. Rustige opstelling: voeding stabiel, korte RF-kabels, geen losse connectors.
+
+In deze firmware staan daarom robuustere defaults:
+- 433 MHz
+- BW 125 kHz
+- SF10
+- CR 4/7
+- preamble 12
+- TX 17 dBm (zender)
+
+> Let op: toegestane frequentie/vermogen verschilt per land en event-regels. Check altijd lokale regelgeving en wedstrijdregels.
+
 
 ## 2) Ontvanger: ESP32 + SX1278 naar USB
 
@@ -170,6 +235,21 @@ Op Windows bijvoorbeeld:
 ```powershell
 python pc_dashboard/dashboard.py --port COM5 --baud 115200
 ```
+
+
+## PR merge-conflict snel oplossen
+
+Als je PR op GitHub conflict geeft in `README.md` en/of de firmware files, kun je lokaal deze helper gebruiken:
+
+```bash
+./scripts/resolve_pr_conflicts.sh main origin
+```
+
+Wat dit script doet:
+1. Merge `origin/main` in je huidige branch.
+2. Bij conflict in bekende bestanden (`README.md`, sender/receiver `.ino`) kiest het de huidige branch-versie.
+3. Als er nog andere conflicten overblijven, stopt het script zodat je die handmatig afmaakt.
+
 
 ## Aanbevolen teststappen
 1. Test zender met alleen VE.Direct aangesloten (controleer serial logs).
