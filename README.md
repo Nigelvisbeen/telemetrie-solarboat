@@ -1,8 +1,4 @@
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-# Solarboat Telemetrie (ESP32+LoRa combi-board + BMV-700)
-=======
 # Solarboat Telemetrie (ESP32 + LoRa SX1278 + BMV-700)
->>>>>>> main
 
 Dit project bevat:
 - **Zender firmware** (`firmware/sender_esp32_lora/sender_esp32_lora.ino`)
@@ -20,7 +16,6 @@ Dit project bevat:
 
 ## Snelle start voor beginners ("ik heb dit nog nooit gedaan")
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 ### Hardware scope (belangrijk)
 Dit project is nu **alleen** bedoeld voor:
 - 2x **LILYGO T3 v1.6.1 ESP32+LoRa combi-board**
@@ -30,13 +25,11 @@ Geen stress — volg dit precies op volgorde.
 
 ### Benodigd
 - 2x LILYGO T3 v1.6.1 ESP32+LoRa combi-board (868/915 variant) met antenne
-=======
 Geen stress — volg dit precies op volgorde.
 
 ### Benodigd
 - 2x ESP32 dev board
 - 2x LoRa SX1278 module (433 MHz) met antenne
->>>>>>> main
 - 1x Victron BMV-700 met VE.Direct kabel
 - Jumper wires
 - 1x laptop met Python 3
@@ -48,13 +41,11 @@ Noem de hardware:
 
 Als je dat niet doet, flash je vaak per ongeluk de verkeerde firmware.
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 ### Stap 2: Zender aansluiten (ESP32+LoRa-A + BMV)
 #### 2.1 Interne LoRa op het combi-board
 Bij de LILYGO T3 v1.6.1 hoef je **geen losse LoRa bedrading** te doen.
 De LoRa-radio zit al intern aan de ESP32 gekoppeld (MOSI=27, SCK=5, CS=18, DIO=26, RST=23, MISO=19).
 (Volgens TTGO-LoRa-Series tabel: v1.6 gebruikt RST=23, oudere v1.0 gebruikte RST=14.)
-=======
 ### Stap 2: Zender aansluiten (ESP32-A + LoRa + BMV)
 #### 2.1 LoRa naar ESP32-A
 | LoRa SX1278 pin | ESP32-A pin |
@@ -67,16 +58,11 @@ De LoRa-radio zit al intern aan de ESP32 gekoppeld (MOSI=27, SCK=5, CS=18, DIO=2
 | NSS / CS | GPIO18 |
 | RST | GPIO14 |
 | DIO0 | GPIO26 |
->>>>>>> main
 
 #### 2.2 VE.Direct (BMV-700) naar ESP32-A
 | BMV VE.Direct | ESP32-A pin |
 |---|---|
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-| TX (BMV zendt data) | GPIO34 (RX-only) |
-=======
 | TX (BMV zendt data) | GPIO16 (RX2) |
->>>>>>> main
 | GND | GND |
 
 > Belangrijk: TX van apparaat 1 gaat naar RX van apparaat 2.
@@ -88,24 +74,14 @@ Je hoeft normaal **niks door te knippen** aan de BMV-700 unit zelf.
 - De BMV-700 heeft een **VE.Direct poort** (kleine 4-polige aansluiting), niet losse TX/GND schroefklemmen op de achterkant.
 - Gebruik daarom een **VE.Direct kabel** of een **VE.Direct -> UART breakout kabel/adapter**.
 - Vanaf die kabel/adapter pak je de signalen naar je ESP32:
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-  - VE.Direct **TX** -> ESP32 **RX2 (GPIO34)**
-=======
   - VE.Direct **TX** -> ESP32 **RX2 (GPIO16)**
->>>>>>> main
   - VE.Direct **GND** -> ESP32 **GND**
 
 Als je een kale kabel gebruikt waarbij aders niet gelabeld zijn: zoek eerst de pinout van precies dat kabeltype op en meet desnoods na met multimeter. Niet gokken.
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-### Stap 3: Ontvanger aansluiten (ESP32+LoRa-B + USB)
-Ook hier gebruik je een tweede ESP32+LoRa combi-board (zelfde type).
-Daarna ESP32+LoRa-B met **micro-USB** aan laptop koppelen (voeding + seriële data).
-=======
 ### Stap 3: Ontvanger aansluiten (ESP32-B + LoRa + USB)
 Gebruik exact dezelfde LoRa pinmapping als hierboven op ESP32-B.
 Daarna ESP32-B met USB aan laptop koppelen.
->>>>>>> main
 
 ### Stap 4: Firmware uploaden
 1. Open `firmware/sender_esp32_lora/sender_esp32_lora.ino` en upload naar **ESP32-A**.
@@ -120,17 +96,14 @@ Als alles werkt zie je regels zoals:
 ```
 
 Zie je niks? Check in deze volgorde:
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 1. Antennes op beide ESP32+LoRa combi-boards aangesloten?
 2. Hebben beide kanten dezelfde LoRa instellingen (freq/SF/BW/CR/sync)?
 3. Is op zender de BMV GND echt gekoppeld aan ESP32 GND?
 4. VE.Direct TX op ESP32 RX (GPIO34) aangesloten?
-=======
 1. Antennes op beide LoRa modules aangesloten?
 2. Hebben beide kanten dezelfde LoRa instellingen (freq/SF/BW/CR/sync)?
 3. Is op zender de BMV GND echt gekoppeld aan ESP32 GND?
 4. VE.Direct TX op ESP32 RX (GPIO16) aangesloten?
->>>>>>> main
 
 ### Stap 6: Dashboard starten op laptop
 ```bash
@@ -155,13 +128,8 @@ python pc_dashboard/dashboard.py --port COM5 --baud 115200
 
 Voor gebruik op een solarboat:
 1. **Voeding en massa**
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-   - Gebruik stabiele 3.3V voeding voor elk ESP32+LoRa combi-board.
-   - Zorg voor correcte common ground tussen BMV VE.Direct GND en de ESP32 GND van de zender.
-=======
    - Gebruik stabiele 3.3V voeding voor ESP32 en LoRa module.
    - Zorg voor correcte common ground tussen ESP32 en LoRa.
->>>>>>> main
 2. **Galvanische aandacht**
    - VE.Direct is TTL-level; check levels en pinout van jouw BMV-kabel.
    - Vermijd ground loops; houd kabels kort en robuust.
@@ -172,20 +140,12 @@ Voor gebruik op een solarboat:
    - Pakket bevat `flags` voor valid/stale data.
    - Dashboard/hostsoftware moet stale data als waarschuwing tonen en niet als realtime waarheid gebruiken.
 5. **EMC en trillingen**
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-   - Mechanisch fixeren van boards/connectoren.
-=======
    - Mechanisch fixeren van modules/connectoren.
->>>>>>> main
    - Gebruik afgeschermde/korte kabels waar mogelijk.
 
 > Dit is een basisimplementatie voor telemetrie en **geen** gecertificeerde maritieme veiligheidscontroller.
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-## 1) Zender: ESP32+LoRa combi-board + BMV-700
-=======
 ## 1) Zender: ESP32 + SX1278 + BMV-700
->>>>>>> main
 
 ### VE.Direct
 - BMV-700 VE.Direct baudrate: **19200 8N1**.
@@ -209,7 +169,6 @@ Binary struct:
 ### Standaard pins (pas aan op jouw board)
 In de `.ino` bestanden staan defaults:
 - SPI: `SCK=5, MISO=19, MOSI=27, CS=18`
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 - LoRa: `RST=23, DIO0=26` (LILYGO T3 v1.6.1)
 - VE.Direct UART: `RX=34, TX=-1` (RX-only)
 
@@ -230,13 +189,11 @@ Als jouw board een afwijkende pinout heeft, pas dan deze constants in de firmwar
 > - `LORA_REGION_433`
 
 
-=======
 - LoRa: `RST=14, DIO0=26`
 - VE.Direct UART: `RX=16, TX=17`
 
 ### LoRa instellingen
 - Freq: `433E6`
->>>>>>> main
 - Bandwidth: `125kHz`
 - SF: `10`
 - CR: `4/7`
@@ -246,7 +203,6 @@ Als jouw board een afwijkende pinout heeft, pas dan deze constants in de firmwar
 
 
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 
 ## Let op: de gekochte VE.Direct TX Digital Output kabel
 
@@ -282,23 +238,19 @@ In de sender-firmware staat daarom nu RX-only ingesteld (`VEDIRECT_TX = -1`).
 
 
 ## Exacte pins: BMV-700 VE.Direct naar ESP32+LoRa combi-board
-=======
 ## Exacte pins: BMV-700 VE.Direct naar ESP32/LoRa-board
->>>>>>> main
 
 Belangrijk: je sluit de BMV-700 **niet** direct op de LoRa-radiochip aan.
 De VE.Direct data gaat naar de **ESP32 UART** op het board, en de ESP32 stuurt daarna via LoRa.
 
 ### Aansluiting VE.Direct -> ESP32 (zender-board)
 Gebruik deze pins in de huidige firmware:
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 - VE.Direct **TX** -> ESP32 **GPIO34** (RX)
 - VE.Direct **GND** -> ESP32 **GND**
 
 In code staat dit als:
 - `VEDIRECT_RX = 34`
 - `VEDIRECT_TX = -1` (RX-only)
-=======
 - VE.Direct **TX** -> ESP32 **GPIO16** (RX2)
 - VE.Direct **GND** -> ESP32 **GND**
 
@@ -308,21 +260,17 @@ Optioneel (meestal niet nodig voor alleen uitlezen):
 In code staat dit als:
 - `VEDIRECT_RX = 16`
 - `VEDIRECT_TX = 17`
->>>>>>> main
 
 ### Belangrijk voor de VE.Direct kabel
 - Gebruik een VE.Direct kabel of VE.Direct->UART breakout (niet knippen in de unit).
 - Aderkleuren kunnen per kabel verschillen; volg altijd de pinout van jouw specifieke kabel/adapter.
 - Meet bij twijfel eerst na met multimeter.
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-=======
 ### Als je een geïntegreerd ESP32+LoRa board koopt
 Dat is prima en vaak makkelijker. Dan blijft VE.Direct aansluiting **hetzelfde** (naar GPIO16/GND),
 maar de interne LoRa-SPI pins kunnen afwijken per boardtype.
 Pas in dat geval `LORA_SCK/MISO/MOSI/CS/RST/DIO0` in de firmware aan op de pinout van dat board.
 
->>>>>>> main
 
 ## Bereikdoel 1km+ zonder netwerk
 
@@ -335,11 +283,7 @@ Voor ~1km+ op water heb je vooral nodig:
 4. Rustige opstelling: voeding stabiel, korte RF-kabels, geen losse connectors.
 
 In deze firmware staan daarom robuustere defaults:
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-- 868 MHz
-=======
 - 433 MHz
->>>>>>> main
 - BW 125 kHz
 - SF10
 - CR 4/7
@@ -349,11 +293,7 @@ In deze firmware staan daarom robuustere defaults:
 > Let op: toegestane frequentie/vermogen verschilt per land en event-regels. Check altijd lokale regelgeving en wedstrijdregels.
 
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
-## 2) Ontvanger: ESP32+LoRa combi-board naar USB
-=======
 ## 2) Ontvanger: ESP32 + SX1278 naar USB
->>>>>>> main
 
 De ontvanger print CSV regels op serial (115200):
 
@@ -361,7 +301,6 @@ De ontvanger print CSV regels op serial (115200):
 
 Gebruik op PC een serial monitor of direct het Python dashboard.
 
-<<<<<<< codex/create-firmware-for-esp32-and-lora-module-tpjwuh
 
 ### OLED scherm op het board
 Ja, de firmware kan nu ook waarden op het ingebouwde OLED tonen (indien de libraries aanwezig zijn):
@@ -376,8 +315,6 @@ Voor Arduino IDE: installeer `Adafruit GFX` en `Adafruit SSD1306` als je display
 Zonder die libraries blijft de firmware werken, alleen zonder OLED-output.
 
 
-=======
->>>>>>> main
 ## 3) Python dashboard (PC)
 
 ```bash
