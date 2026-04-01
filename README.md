@@ -56,7 +56,7 @@ Belangrijk:
 | TX (data uit BMV) | GPIO34 (RX, input-only) |
 | GND | GND |
 
-<img width="1920" height="1080" alt="aansluiten lora transmitter" src="https://github.com/user-attachments/assets/01414516-20f4-48e5-a9bd-13734b91a84b" />
+<img width="1600" height="900" alt="aansluiten lora transmitter" src="https://github.com/user-attachments/assets/01414516-20f4-48e5-a9bd-13734b91a84b" />
 
 
 
