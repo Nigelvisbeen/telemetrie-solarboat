@@ -236,6 +236,21 @@ Op Windows bijvoorbeeld:
 python pc_dashboard/dashboard.py --port COM5 --baud 115200
 ```
 
+
+## PR merge-conflict snel oplossen
+
+Als je PR op GitHub conflict geeft in `README.md` en/of de firmware files, kun je lokaal deze helper gebruiken:
+
+```bash
+./scripts/resolve_pr_conflicts.sh main origin
+```
+
+Wat dit script doet:
+1. Merge `origin/main` in je huidige branch.
+2. Bij conflict in bekende bestanden (`README.md`, sender/receiver `.ino`) kiest het de huidige branch-versie.
+3. Als er nog andere conflicten overblijven, stopt het script zodat je die handmatig afmaakt.
+
+
 ## Aanbevolen teststappen
 1. Test zender met alleen VE.Direct aangesloten (controleer serial logs).
 2. Test LoRa link op korte afstand (binnen) met twee ESP32's.
